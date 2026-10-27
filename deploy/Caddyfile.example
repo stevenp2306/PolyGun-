@@ -1,0 +1,21 @@
+# Example TLS reverse proxy for the dashboard (Caddy obtains certificates automatically).
+# Prefer an SSH tunnel or a private VPN if you can. If you use this:
+#  * point a DNS name at the server, open ports 80/443 in the firewall,
+#  * generate a password hash with `caddy hash-password`,
+#  * keep polybot's own dashboard password enabled as a second layer.
+
+dashboard.example.com {
+	# Health endpoint for an external uptime monitor (returns no account data).
+	handle /healthz {
+		reverse_proxy 127.0.0.1:8080
+	}
+	handle {
+		basicauth {
+			monitor <bcrypt-hash-from-caddy-hash-password>
+		}
+		reverse_proxy 127.0.0.1:8080
+	}
+	header {
+		Strict-Transport-Security "max-age=31536000"
+	}
+}

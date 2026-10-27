@@ -1,0 +1,29 @@
+# docker compose up -d --build      (PAPER mode by default)
+services:
+  polybot:
+    build: .
+    image: polybot:local
+    restart: unless-stopped          # automatic restart after crashes and reboots
+    env_file:
+      - .env                         # non-secret settings
+      - path: secrets/polybot.env    # secrets (created by `polybot setup-credentials`), never baked into the image
+        required: false
+    environment:
+      POLYBOT_DASHBOARD_HOST: 0.0.0.0   # inside the container; the port is published on localhost only (below)
+    ports:
+      - "127.0.0.1:8080:8080"        # NOT reachable from the internet; use an SSH tunnel / VPN / TLS proxy
+    volumes:
+      - ./data:/app/data             # database, research snapshots, checklist, backups
+      - ./logs:/app/logs             # rotating application logs (10 x 10 MB)
+    stop_grace_period: 30s           # time for graceful shutdown (cancel entry orders)
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"

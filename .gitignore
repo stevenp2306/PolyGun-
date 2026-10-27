@@ -1,0 +1,25 @@
+# --- secrets: NEVER commit these ---
+.env
+.env.*
+!.env.example
+secrets/
+*.key
+*.pem
+# --- runtime data (may contain account/trade information) ---
+data/*.db
+data/*.db-*
+data/*.sqlite*
+data/live_checklist.json
+data/research/
+data/backups/
+logs/
+reports/*.md
+!reports/.gitkeep
+# --- python ---
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+build/
+dist/

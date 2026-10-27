@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>polybot</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <div id="modeBadge" class="badge">…</div>
+  <div class="title">polybot <span id="state" class="pill">…</span></div>
+  <div class="controls">
+    <button id="btnPause">Pause entries</button>
+    <button id="btnResume">Resume</button>
+    <button id="btnKill" class="danger">KILL SWITCH</button>
+  </div>
+</header>
+<div id="banner" class="banner hidden"></div>
+<nav>
+  <a href="#overview" class="tab active">Overview</a>
+  <a href="#positions" class="tab">Positions</a>
+  <a href="#orders" class="tab">Orders</a>
+  <a href="#opportunities" class="tab">Opportunities</a>
+  <a href="#performance" class="tab">Performance</a>
+  <a href="#controls" class="tab">Controls &amp; config</a>
+  <a href="#alerts" class="tab">Alerts &amp; audit</a>
+</nav>
+<main>
+  <section id="overview" class="panel active">
+    <div class="cards" id="cards"></div>
+    <h3>Why the bot can / cannot open positions</h3>
+    <ul id="gate"></ul>
+    <h3>Data feeds &amp; providers</h3>
+    <div id="feeds"></div>
+    <div id="liveGate"></div>
+    <div id="external"></div>
+  </section>
+  <section id="positions" class="panel">
+    <p class="note">P&amp;L after costs = what selling ALL shares into the visible bids right now would return
+      (walking depth, minus taker fees) minus total cost including entry fees. Unabsorbed shares count as $0.</p>
+    <div id="posTable"></div>
+  </section>
+  <section id="orders" class="panel">
+    <div id="ordTable"></div>
+  </section>
+  <section id="opportunities" class="panel">
+    <p class="note">Every monitored outcome with its independent estimate, executable prices, costs and the exact
+      rule that approved or rejected it. Thresholds are unvalidated research assumptions.</p>
+    <label><input type="checkbox" id="onlyFair"> only outcomes with an independent estimate</label>
+    <div id="oppTable"></div>
+  </section>
+  <section id="performance" class="panel">
+    <label>Period <select id="period"><option value="1d">1 day</option><option value="7d">7 days</option>
+      <option value="30d">30 days</option><option value="all" selected>All</option></select></label>
+    <div id="perf"></div>
+  </section>
+  <section id="controls" class="panel">
+    <h3>Risk controls</h3>
+    <div class="row">
+      <button id="btnReset">Reset risk lock…</button>
+      <button id="btnClearKill">Clear kill switch…</button>
+      <button id="btnClearHalt">Clear halt…</button>
+      <a class="button" href="/api/export.csv">Export trades (CSV)</a>
+    </div>
+    <h3>Change a setting (password re-entry required)</h3>
+    <div class="row">
+      <select id="cfgKey"></select><input id="cfgVal" placeholder="new value">
+      <input id="cfgPw" type="password" placeholder="dashboard password">
+      <button id="btnCfg">Apply</button>
+    </div>
+    <p class="note">Changing a risk setting in LIVE mode invalidates the live checklist; live orders stop until
+      you re-run <code>polybot live-checklist</code>.</p>
+    <h3>Current configuration</h3>
+    <div id="cfg"></div>
+    <h3>Strategy card</h3>
+    <div id="card"></div>
+  </section>
+  <section id="alerts" class="panel">
+    <div id="alertList"></div>
+  </section>
+</main>
+<script src="/static/app.js"></script>
+</body>
+</html>
